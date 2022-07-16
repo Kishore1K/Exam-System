@@ -1,0 +1,10 @@
+{
+    "uid": "app",
+    "append": true,
+    "watch": true,
+    "script": "server.js",
+    "sourceDir": "",
+    "logFile": "/home/myuser/logs/forever.log",
+    "outFile": "/home/myuser/logs/out.log",
+    "errFile": "/home/myuser/logs/error.log"
+}
