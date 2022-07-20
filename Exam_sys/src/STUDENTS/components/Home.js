@@ -123,6 +123,15 @@ const Home = () => {
                     }>
                         <Text style={styles.buttonText}>View Result</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => {
+                        storage.remove({key: 'Suser'});
+                        storage.remove({key:'SQuizid'});
+                        navigation.navigate('SLogin');
+                        
+                    }
+                    }>
+                        <Text style={styles.buttonText}>LOGOUT</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             

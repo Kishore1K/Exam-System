@@ -68,22 +68,26 @@ exports.login = (req, res, done) => {
             //result is empty 
             if(result==''){
                 console.log(result);
-                res.status(404).json({message:"Email didnt match"});
+                res.status(404).json({message:"User  doesnt exist"});
 
             }
-            bcrypt.compare(req.body.password, result[0].password, (err, compareRes) => {
-                if (err) { // error while comparing
-                    console.log(err)
-                    res.status(502).json({message: "error while checking user password"});
-                } else if (compareRes) { // password match
-                    console.log(result)
-                    const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
-                    res.status(200).json({message: "user logged in", "token": token});
-                } else { // password doesnt match
+            if(result && result.length > 0){
+                bcrypt.compare(req.body.password, result[0].password, (err, compareRes) => {
+                    if (err) { // error while comparing
+                        console.log(err)
+                        res.status(502).json({message: "error while checking user password"});
+                    } else if (compareRes) { // password match
+                        console.log(result)
+                        const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
+                        res.status(200).json({message: "user logged in", "token": token});
+                    } else { // password doesnt match
+    
+                        res.status(401).json({message: "invalid credentials"});
+                    };
+                });
 
-                    res.status(401).json({message: "invalid credentials"});
-                };
-            });
+            }
+            
         }
     );  
 };
@@ -291,6 +295,7 @@ exports.getStudentDetails = (req, res) => {
 exports.selectStudent = (req, res) => {
     const mail = req.body.email;
     console.log(mail)
+    console.log("Select Students");
     db.query(`SELECT s.STDID,s.Name, s.EMAIL FROM student s, staff st WHERE s.DEPT=st.DEPT and st.mail = ?`, [mail],
         (err, result) => {
             if (err) {

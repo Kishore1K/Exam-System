@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 const API_URL = Platform.OS === 'web' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
 import storage from "../../FACULTY/auth/StorageHelper";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text , ScrollView} from "react-native";
 const Result = () => {
     const [data, setData] = React.useState([]);
 
@@ -29,7 +29,8 @@ const Result = () => {
     // alert(data.NAME)
 
     return (
-        <View style={styles.background} >
+        <ScrollView>
+             <View style={styles.background} >
             <View style={styles.border}>{
                 data.map(item => {
                     
@@ -47,6 +48,8 @@ const Result = () => {
             }
             </View>
         </View>
+        </ScrollView>
+       
     )
 }
 

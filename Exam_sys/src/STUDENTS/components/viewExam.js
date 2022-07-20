@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {View, StyleSheet, Text, Button, Alert} from "react-native";
+import {View, StyleSheet, Text, Button, Alert, ScrollView} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 const API_URL = Platform.OS === 'web' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
 import storage from "../../FACULTY/auth/StorageHelper";
@@ -28,13 +28,12 @@ const ViewExam = () => {
     // alert(data.NAME)
     
     return (
-        
-        // Should Display Exams  Allocated to Student and Button To attend The Quiz
+        <ScrollView>
         <View style={styles.background} >
             <View style={styles.border}>{
                 data.map(item => {
                     return (
-                        <View key={item.ID}>
+                        <View key={item.id}>
                             <Text style={styles.text}>Exam Name: {item.name}</Text>
                             <Text style={styles.text}>Exam Status: {item.STATUS}</Text>
                             <Text style={styles.text}>Exam ID: {item.quizid}</Text>
@@ -51,6 +50,7 @@ const ViewExam = () => {
             </View>
                 
         </View>
+        </ScrollView>
     )
 }
 

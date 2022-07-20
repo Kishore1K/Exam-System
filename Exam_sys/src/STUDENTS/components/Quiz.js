@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import { View, StyleSheet, Text, Button, SliderComponent, Alert } from 'react-native';
 import { CurrentRenderContext } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import storage from '../../FACULTY/auth/StorageHelper';
@@ -18,7 +18,7 @@ const Quiz = () => {
     const [quizid, setQuizid] = useState('');
     const navigation = useNavigation();
 
-
+    var status =0;
     const shuffle = (a) => {
         a.sort(() => Math.random() - 0.5);
     }
@@ -70,36 +70,6 @@ const Quiz = () => {
     }
         , []);
     console.log(data);
-    
-
-                // found data goes to then()
-
-
-    // const QuizDetails = () => {
-    //     axios.post(`${API_URL}/student/viewQuiz`, {
-    //         quizid: 
-    //     }).then(res => {
-    //         setData(res.data.result.map(item => (
-    //             {
-    //                 question: item.question,
-    //                 answer: item.answer,
-    //                 options: [item.op1, item.op2, item.op3, item.op4]
-    //             }
-    //         )));
-    //         // console.log(data[0].answer);
-    //         // console.log(data[0].options);
-    //         alert(data[0].options);
-    //     }
-    //     )
-    // }
-   
-
-    // useEffect(() => {
-    //     QuizDetails();
-    // }
-    //     , []);
-
-    // alert(data.NAME)
     return (
         <View style={styles.background}>
         {
@@ -121,41 +91,29 @@ const Quiz = () => {
             </View>
 
         }
+        
         {
+            
             number === data.length && 
              <View style={styles.QuizWindow} >
-                <Text style={styles.question}>Your Score: {pts}</Text>
-                <Button style = {styles.button} title="Restart Quiz" onPress={() => {
-                    setNumber(0);
-                    setPts(0);
-                }
-                }/>
-            </View>
-            
-
-        }
-        {
-            number === data.length && 
-            <View style={styles.QuizWindow}>
                 <Button title="Submit Quiz" onPress={() => {
-                    alert("Submit Quiz");
                     axios.post(`${API_URL}/student/insertMarks`, {
                         quizid: quizid,
                         email: email,
                         marks: pts,
                         total : data.length
                     }).then(res => {
-                        console.log(res.data.result);
-                        alert(res.data.result);
+                        status = 1;
+                        Alert.alert(`You Scored ${pts}`);
+                        navigation.navigate('SHome');
                     }
                     )
-
                 }
                 }/>
             </View>
-
-       
+            
         }
+        
         </View>
     )
 }

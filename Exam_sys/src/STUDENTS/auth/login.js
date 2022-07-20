@@ -28,14 +28,18 @@ const Login = () => {
         if(isLogin){
             axios.post(`${API_URL}/student/login`, payload)
             .then(res => {
+                
                 if (res.status !== 200) {
-                    alert('Data Not Sent');
                     setIsError(true);
-                    setMessage(res.data.message);
+                    console.log(res.data.message);
+                    alert('User Not exits')
+                    setMessage('User Doesnt Exist');
                 } else {
                     storage.save({ key: 'Suser', data: email, expires: null });     
                     setIsError(false);
                     setMessage(res.data.message);
+                    console.log(res.data.message);
+
                     alert('Loged IN')
                    
                     navigation.navigate('SHome');
@@ -45,7 +49,7 @@ const Login = () => {
                 }
             }).catch(err => {
                 setIsError(true);
-                setMessage(err.message);
+                setMessage('User Doesnt Exist');
             }
         );
         }
@@ -59,7 +63,6 @@ const Login = () => {
             </TouchableOpacity>
             <Text style={styles.title}>Login</Text>
             <Text style={styles.subtitle}>Login to your account</Text>
-            <Text style={styles.error}>{message}</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"

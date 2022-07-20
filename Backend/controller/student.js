@@ -68,6 +68,7 @@ exports.login = (req, res, done) => {
     else{
         
     console.log(email, password)
+
     db.query(
         `SELECT * FROM STUDENT WHERE EMAIL = ? `,
         [email],
@@ -75,20 +76,26 @@ exports.login = (req, res, done) => {
             if(err){
                 console.log(err);
             }
+            if(result &&result.length > 0 ){
+                bcrypt.compare(req.body.password, result[0].PASSWORD, (err, compareRes) => {
+                    if (err) { // error while comparing
+                        console.log(err)
+                        res.status(502).json({message: "error while checking user password"});
+                    } else if (compareRes) { // password match
+                        console.log(result)
+                        const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
+                        res.status(200).json({message: "user logged in", "token": token});
+                    } else { // password doesnt match
+    
+                        res.status(401).json({message: "invalid credentials"});
+                    };
+                });
 
-            bcrypt.compare(req.body.password, result[0].PASSWORD, (err, compareRes) => {
-                if (err) { // error while comparing
-                    console.log(err)
-                    res.status(502).json({message: "error while checking user password"});
-                } else if (compareRes) { // password match
-                    console.log(result)
-                    const token = jwt.sign({ email: req.body.email }, 'secret', { expiresIn: '1h' });
-                    res.status(200).json({message: "user logged in", "token": token});
-                } else { // password doesnt match
+            }else{
+                res.status(401).json({message:"user doesnt exists"});
+            }
 
-                    res.status(401).json({message: "invalid credentials"});
-                };
-            });
+            
         }
     );
     }  
